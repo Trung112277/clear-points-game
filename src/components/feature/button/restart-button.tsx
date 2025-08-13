@@ -1,5 +1,10 @@
 import { Button } from "@/components/ui/button";
 
-export function RestartButton() {
-  return <Button className="w-[150px]">Restart</Button>;
+interface RestartButtonProps {
+  onClick: () => void;
+  isPlaying: boolean;
+}
+
+export function RestartButton({ onClick }: RestartButtonProps) {
+  return <Button onClick={onClick} >Restart</Button>;
 }

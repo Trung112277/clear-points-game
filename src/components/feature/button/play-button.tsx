@@ -1,5 +1,10 @@
 import { Button } from "@/components/ui/button";
 
-export function PlayButton() {
-  return <Button className="w-[150px]">Play</Button>;
+interface PlayButtonProps {
+  onClick: () => void;
+  isPlaying: boolean;
+}
+
+export function PlayButton({ onClick }: PlayButtonProps) {
+  return <Button onClick={onClick} >Play</Button>;
 }
