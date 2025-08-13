@@ -4,9 +4,15 @@ An exciting React game where players must click points in numerical order before
 
 ## 🎬 **Video Demo**
 
-https://github.com/Trung112277/clear-points-game/assets/raw/main/public/video/clear-points-game-test.mp4
+[🎥 **Watch Full Demo Video**](public/video/clear-points-game-test.mp4)
 
-> **Note**: If the video doesn't play, you can download it from the [video folder](public/video/clear-points-game-test.mp4)
+## 🌐 **Live Demo**
+
+**🎮 Play the game online**: [https://clear-points-game.vercel.app](https://clear-points-game.vercel.app)
+
+> **Note**: The live demo is hosted on Vercel and updates automatically with each commit.
+
+> **Note**: Click the GIF to see a preview, or click the link below to watch the full video demo.
 
 ## 🎮 **Core Features**
 
@@ -189,7 +195,7 @@ const { isAutoPlaying, canAutoPlay } = useAutoPlay({
 
 ## 🎬 **Video Demo**
 
-Watch the full demo video at: [`public/video/Clear points game test.mp4`](public/video/Clear%20points%20game%20test.mp4)
+Watch the full demo video at: [`public/video/Clear points game test.mp4`](public/video/clear-points-game-test.mp4)
 
 This video demonstrates:
 - Basic gameplay
