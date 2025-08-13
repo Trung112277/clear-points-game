@@ -8,17 +8,6 @@ export function useGame() {
   const [points, setPoints] = useState<number>(GAME_CONSTANTS.MIN_POINTS);
   const [gamePoints, setGamePoints] = useState<GamePoint[]>([]);
 
-  const startGame = useCallback(() => {
-    setIsPlaying(true);
-    generateRandomPoints();
-  }, [points]);
-
-  const resetGame = useCallback(() => {
-    setIsPlaying(false);
-    setTime(0);
-    setGamePoints([]);
-  }, []);
-
   const generateRandomPoints = useCallback(() => {
     const maxPosition = GAME_CONSTANTS.CONTAINER_SIZE - GAME_CONSTANTS.POINT_SIZE;
     
@@ -31,6 +20,22 @@ export function useGame() {
     setGamePoints(newPoints);
   }, [points]);
 
+  const startGame = useCallback(() => {
+    setIsPlaying(true);
+    generateRandomPoints();
+  }, [generateRandomPoints]);
+
+  const resetGame = useCallback(() => {
+    setIsPlaying(false);
+    setTime(0);
+    setGamePoints([]);
+  }, []);
+
+  const stopTimer = useCallback(() => {
+    console.log('useGame: stopTimer called, setting isPlaying = false but keeping gamePoints');
+    setIsPlaying(false);
+  }, []);
+
   return {
     isPlaying,
     time,
@@ -39,6 +44,7 @@ export function useGame() {
     setPoints,
     gamePoints,
     startGame,
-    resetGame
+    resetGame,
+    stopTimer
   };
 }

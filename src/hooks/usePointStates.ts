@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { GAME_CONSTANTS } from "@/constants";
 import type { GamePoint } from "@/types";
 
@@ -31,6 +31,7 @@ export function usePointStates(gamePoints: GamePoint[]) {
   }, []);
 
   const handlePointClick = useCallback((pointNumber: number) => {
+    console.log('Point clicked:', pointNumber);
     setPointStates(prev => 
       prev.map(point => 
         point.number === pointNumber 
@@ -41,25 +42,52 @@ export function usePointStates(gamePoints: GamePoint[]) {
   }, []);
 
   const updateCountdown = useCallback(() => {
-    setPointStates(prev => 
-      prev.map(point => {
+    setPointStates(prev => {
+      const updated = prev.map(point => {
         if (point.isClicked && point.countdown > 0) {
           const newCountdown = point.countdown - GAME_CONSTANTS.COUNTDOWN_DECREMENT;
           if (newCountdown <= 0) {
+            console.log('Point', point.number, 'becoming invisible');
             return { ...point, isVisible: false };
           }
           return { ...point, countdown: newCountdown };
         }
         return point;
-      })
-    );
+      });
+      
+      const visibleCount = updated.filter(p => p.isVisible).length;
+      const clickedCount = updated.filter(p => p.isClicked).length;
+      console.log('Countdown update:', { visibleCount, clickedCount, total: updated.length });
+      
+      return updated;
+    });
   }, []);
+
+  const isAllCleared = useMemo(() => {
+    const hasGamePoints = gamePoints.length > 0;
+    const hasPointStates = pointStates.length > 0;
+    const allInvisible = pointStates.every(point => !point.isVisible);
+    
+    console.log('usePointStates isAllCleared calculation:', {
+      hasGamePoints,
+      hasPointStates,
+      allInvisible,
+      gamePointsLength: gamePoints.length,
+      pointStatesLength: pointStates.length,
+      visibleCount: pointStates.filter(p => p.isVisible).length,
+      clickedCount: pointStates.filter(p => p.isClicked).length,
+      result: hasGamePoints && hasPointStates && allInvisible
+    });
+    
+    return hasGamePoints && hasPointStates && allInvisible;
+  }, [gamePoints, pointStates]);
 
   return {
     pointStates,
     initializePoints,
     resetPoints,
     handlePointClick,
-    updateCountdown
+    updateCountdown,
+    isAllCleared
   };
 }

@@ -7,31 +7,56 @@ import { usePointStates } from "@/hooks/usePointStates";
 import { getZIndex } from "@/utils";
 
 export function GameContainer() {
-  const { gamePoints, isPlaying } = useGameContext();
+  const { gamePoints, isPlaying, setIsAllCleared, stopTimer } = useGameContext();
   const { 
     pointStates, 
     initializePoints, 
     handlePointClick, 
     updateCountdown, 
-    resetPoints 
+    resetPoints,
+    isAllCleared
   } = usePointStates(gamePoints);
 
   useEffect(() => {
-    if (gamePoints.length > 0) {
-      initializePoints();
-    }
-  }, [gamePoints, initializePoints]);
+    console.log('GameContainer State Changed:', {
+      isPlaying,
+      isAllCleared,
+      pointStatesLength: pointStates.length,
+      visiblePoints: pointStates.filter(p => p.isVisible).length
+    });
+  }, [isPlaying, isAllCleared, pointStates.length]);
 
   useEffect(() => {
-    if (!isPlaying) {
+    console.log('GameContainer: Updating context isAllCleared:', isAllCleared);
+    setIsAllCleared(isAllCleared);
+  }, [isAllCleared, setIsAllCleared]);
+
+  useEffect(() => {
+    if (isAllCleared && isPlaying) {
+      console.log('GameContainer: Stopping timer because all points cleared');
+      stopTimer();
+    }
+  }, [isAllCleared, isPlaying, stopTimer]);
+
+  useEffect(() => {
+    if (!isPlaying && gamePoints.length === 0) {
+      console.log('GameContainer: Game reset, clearing points');
       resetPoints();
     }
-  }, [isPlaying, resetPoints]);
+  }, [isPlaying, gamePoints.length, resetPoints]);
 
   useEffect(() => {
-    const interval = setInterval(updateCountdown, GAME_CONSTANTS.COUNTDOWN_INTERVAL);
-    return () => clearInterval(interval);
-  }, [updateCountdown]);
+    if (gamePoints.length > 0 && isPlaying) {
+      initializePoints();
+    }
+  }, [gamePoints, isPlaying, initializePoints]);
+
+  useEffect(() => {
+    if (isPlaying && pointStates.length > 0) {
+      const interval = setInterval(updateCountdown, GAME_CONSTANTS.COUNTDOWN_INTERVAL);
+      return () => clearInterval(interval);
+    }
+  }, [isPlaying, pointStates.length, updateCountdown]);
 
   return (
     <div className="flex flex-col gap-4">
