@@ -4,7 +4,7 @@ An exciting React game where players must click points in numerical order before
 
 ## 🎬 **Video Demo**
 
-https://github.com/YOUR_USERNAME/clear-points-game/assets/raw/main/public/video/clear-points-game-test.mp4
+https://github.com/Trung112277/clear-points-game/assets/raw/main/public/video/clear-points-game-test.mp4
 
 > **Note**: If the video doesn't play, you can download it from the [video folder](public/video/clear-points-game-test.mp4)
 
