@@ -1,21 +1,17 @@
 import { useState, useEffect } from "react";
-import type { Dispatch, SetStateAction } from "react";
+import { GAME_CONSTANTS } from "@/constants";
+import { useGameContext } from "@/contexts/use-game-context";
 
-interface CountTimeProps {
-  isPlaying: boolean;
-  time: number;
-  setTime: Dispatch<SetStateAction<number>>;
-}
-
-export function CountTime({ isPlaying, time, setTime }: CountTimeProps) {
+export function CountTime() {
+  const { isPlaying, time, setTime } = useGameContext();
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     try {
       if (isPlaying) {
         const id = setInterval(() => {
-          setTime((prev) => prev + 0.1); 
-        }, 100);
+          setTime((prev: number) => prev + GAME_CONSTANTS.TIMER_INCREMENT);
+        }, GAME_CONSTANTS.TIMER_INTERVAL);
         setIntervalId(id);
       } else {
         if (intervalId) {
@@ -38,10 +34,16 @@ export function CountTime({ isPlaying, time, setTime }: CountTimeProps) {
     return `${seconds.toFixed(1)}s`;
   };
 
+  const formatDateTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toFixed(1).padStart(4, '0')}`;
+  };
+
   return (
     <div className="flex gap-4 items-center w-[300px]">
       <span className="text-lg font-bold w-[100px]">Time:</span>
-      <time className="text-lg font-bold" dateTime={`00:${time.toFixed(1)}`}>
+      <time className="text-lg font-bold" dateTime={formatDateTime(time)}>
         {formatTime(time)}
       </time>
     </div>
