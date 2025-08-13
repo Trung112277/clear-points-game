@@ -1,13 +1,13 @@
 import { useGameContext } from "@/contexts/use-game-context";
 
 export function Heading() {
-    const { isAllCleared } = useGameContext();
+    const { isAllCleared, gameOver } = useGameContext();
     
     return (
         <h1 className={`text-2xl font-bold uppercase ${
-            isAllCleared ? 'text-green-600' : ''
+            gameOver ? 'text-red-600' : isAllCleared ? 'text-green-600' : ''
         }`}>
-            {isAllCleared ? 'All Cleared!' : "Let's Play"}
+            {gameOver ? 'Game Over!' : isAllCleared ? 'All Cleared!' : "Let's Play"}
         </h1>
     );
 }

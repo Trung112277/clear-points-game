@@ -9,6 +9,7 @@ interface GameContextType {
   points: number;
   gamePoints: GamePoint[];
   isAllCleared: boolean;
+  gameOver: boolean;
   
   // Game actions
   setTime: Dispatch<SetStateAction<number>>;
@@ -17,6 +18,7 @@ interface GameContextType {
   resetGame: () => void;
   stopTimer: () => void;
   setIsAllCleared: (cleared: boolean) => void;
+  setGameOver: (gameOver: boolean) => void;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);

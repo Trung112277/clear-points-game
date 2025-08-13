@@ -11,7 +11,10 @@ interface PointState {
   isVisible: boolean;
 }
 
-export function usePointStates(gamePoints: GamePoint[]) {
+export function usePointStates(
+  gamePoints: GamePoint[], 
+  setGameOver?: (gameOver: boolean) => void
+) {
   const [pointStates, setPointStates] = useState<PointState[]>([]);
 
   const initializePoints = useCallback(() => {
@@ -32,6 +35,30 @@ export function usePointStates(gamePoints: GamePoint[]) {
 
   const handlePointClick = useCallback((pointNumber: number) => {
     console.log('Point clicked:', pointNumber);
+    
+    const clickedPoint = pointStates.find(point => point.number === pointNumber);
+    if (!clickedPoint || !clickedPoint.isVisible) {
+      console.log('Point clicked is not visible or does not exist');
+      return;
+    }
+    
+    if (clickedPoint.isClicked) {
+      console.log('Point already clicked, allowing re-click');
+      return;
+    }
+    
+    const nextExpectedNumber = pointStates
+      .filter(point => !point.isClicked && point.isVisible)
+      .sort((a, b) => a.number - b.number)[0]?.number;
+    
+    if (nextExpectedNumber !== pointNumber) {
+      console.log('Game Over: Wrong order! Expected:', nextExpectedNumber, 'Got:', pointNumber);
+      if (setGameOver) {
+        setGameOver(true);
+      }
+      return;
+    }
+    
     setPointStates(prev => 
       prev.map(point => 
         point.number === pointNumber 
@@ -39,7 +66,7 @@ export function usePointStates(gamePoints: GamePoint[]) {
           : point
       )
     );
-  }, []);
+  }, [pointStates, setGameOver]);
 
   const updateCountdown = useCallback(() => {
     setPointStates(prev => {

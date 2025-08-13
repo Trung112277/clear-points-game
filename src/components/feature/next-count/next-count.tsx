@@ -4,12 +4,23 @@ interface NextCountProps {
     isClicked: boolean;
     isVisible: boolean;
   }>;
+  gameOver: boolean;
 }
 
-export function NextCount({ pointStates }: NextCountProps) {
+export function NextCount({ pointStates, gameOver }: NextCountProps) {
   const nextNumber = pointStates
-    .filter(point => !point.isClicked && point.isVisible)
-    .sort((a, b) => a.number - b.number)[0]?.number;
+  .filter(point => !point.isClicked && point.isVisible)
+  .sort((a, b) => a.number - b.number)[0]?.number;
+
+  if (gameOver) {
+    return (
+      <div className="text-center">
+        <span className="text-lg font-bold text-red-600">
+          Wrong click!
+        </span>
+      </div>
+    );
+  }
 
   if (!nextNumber) {
     return (

@@ -8,7 +8,7 @@ import { useGameLogic } from "@/hooks/useGameLogic";
 import { getZIndex } from "@/utils";
 
 export function GameContainer() {
-  const { gamePoints, isPlaying, setIsAllCleared, stopTimer } = useGameContext();
+  const { gamePoints, isPlaying, setIsAllCleared, setGameOver, stopTimer, gameOver } = useGameContext();
   const { 
     pointStates, 
     initializePoints, 
@@ -16,13 +16,14 @@ export function GameContainer() {
     updateCountdown, 
     resetPoints,
     isAllCleared
-  } = usePointStates(gamePoints);
+  } = usePointStates(gamePoints, setGameOver);
 
   useGameLogic({
     isPlaying,
     gamePoints,
     pointStates,
     isAllCleared,
+    gameOver,
     setIsAllCleared,
     stopTimer,
     resetPoints,
@@ -48,7 +49,7 @@ export function GameContainer() {
           height: `${GAME_CONSTANTS.CONTAINER_SIZE}px` 
         }}
       >
-        {isPlaying && pointStates
+        {(isPlaying || gameOver) && pointStates
           .filter(point => point.isVisible)
           .map((point) => (
             <div
@@ -65,11 +66,12 @@ export function GameContainer() {
                 isClicked={point.isClicked}
                 countdown={point.countdown}
                 onClick={() => handlePointClick(point.number)}
+                gameOver={gameOver}
               />
             </div>
           ))}
       </div>
-      <NextCount pointStates={pointStates} />
+      <NextCount pointStates={pointStates} gameOver={gameOver} />
     </div>
   );
 }

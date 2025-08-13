@@ -6,16 +6,23 @@ import { useState, useCallback, useEffect } from "react";
 export function GameProvider({ children }: { children: ReactNode }) {
   const game = useGame();
   const [isAllCleared, setIsAllCleared] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
 
   const setAllClearedWithLog = useCallback((value: boolean) => {
     console.log('Context: setIsAllCleared called with:', value);
     setIsAllCleared(value);
   }, []);
 
+  const setGameOverWithLog = useCallback((value: boolean) => {
+    console.log('Context: setGameOver called with:', value);
+    setGameOver(value);
+  }, []);
+
   const resetGameWithAllCleared = useCallback(() => {
-    console.log('Context: Resetting game and isAllCleared');
+    console.log('Context: Resetting game, isAllCleared and gameOver');
     game.resetGame();
     setIsAllCleared(false);
+    setGameOver(false);
   }, [game]);
 
   useEffect(() => {
@@ -32,12 +39,14 @@ export function GameProvider({ children }: { children: ReactNode }) {
     points: game.points,
     gamePoints: game.gamePoints,
     isAllCleared,
+    gameOver,
     setTime: game.setTime,
     setPoints: game.setPoints,
     startGame: game.startGame,
     resetGame: resetGameWithAllCleared,
     stopTimer: game.stopTimer,
-    setIsAllCleared: setAllClearedWithLog
+    setIsAllCleared: setAllClearedWithLog,
+    setGameOver: setGameOverWithLog
   };
 
   return (

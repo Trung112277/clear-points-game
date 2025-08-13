@@ -16,6 +16,7 @@ interface UseGameLogicProps {
   gamePoints: GamePoint[];
   pointStates: PointState[];
   isAllCleared: boolean;
+  gameOver: boolean;
   setIsAllCleared: (value: boolean) => void;
   stopTimer: () => void;
   resetPoints: () => void;
@@ -28,6 +29,7 @@ export function useGameLogic({
   gamePoints,
   pointStates,
   isAllCleared,
+  gameOver,
   setIsAllCleared,
   stopTimer,
   resetPoints,
@@ -39,23 +41,23 @@ export function useGameLogic({
   }, [isAllCleared, setIsAllCleared]);
 
   useEffect(() => {
-    if (isAllCleared && isPlaying) {
+    if ((isAllCleared || gameOver) && isPlaying) {
       stopTimer();
     }
 
-    if (!isPlaying && gamePoints.length === 0 && !isAllCleared) {
+    if (!isPlaying && gamePoints.length === 0 && !isAllCleared && !gameOver) {
       resetPoints();
     }
 
-    if (gamePoints.length > 0 && isPlaying && !isAllCleared) {
+    if (gamePoints.length > 0 && isPlaying && !isAllCleared && !gameOver) {
       initializePoints();
     }
-  }, [isAllCleared, isPlaying, gamePoints.length, stopTimer, resetPoints, initializePoints]);
+  }, [isAllCleared, gameOver, isPlaying, gamePoints.length, stopTimer, resetPoints, initializePoints]);
 
   useEffect(() => {
-    if (isPlaying && pointStates.length > 0) {
+    if (isPlaying && pointStates.length > 0 && !gameOver) {
       const interval = setInterval(updateCountdown, GAME_CONSTANTS.COUNTDOWN_INTERVAL);
       return () => clearInterval(interval);
     }
-  }, [isPlaying, pointStates.length, updateCountdown]);
+  }, [isPlaying, pointStates.length, gameOver, updateCountdown]);
 }

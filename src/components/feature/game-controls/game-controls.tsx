@@ -4,19 +4,20 @@ import { RestartButton } from "../button/restart-button";
 import { useGameContext } from "@/contexts/use-game-context";
 
 export function GameControls() {
-  const { isPlaying, startGame, resetGame, isAllCleared } = useGameContext();
+  const { isPlaying, startGame, resetGame, isAllCleared, gameOver } = useGameContext();
 
   console.log('GameControls Render:', { 
     isPlaying, 
     isAllCleared,
-    shouldShowRestartOnly: isAllCleared,
-    shouldShowPlayButton: !isPlaying && !isAllCleared,
-    shouldShowGameButtons: isPlaying && !isAllCleared,
+    gameOver,
+    shouldShowRestartOnly: isAllCleared || gameOver,
+    shouldShowPlayButton: !isPlaying && !isAllCleared && !gameOver,
+    shouldShowGameButtons: isPlaying && !isAllCleared && !gameOver,
     renderTime: new Date().toISOString()
   });
 
-  if (isAllCleared) {
-    console.log('GameControls: Showing only RestartButton because all points cleared');
+  if (gameOver || isAllCleared) {
+    console.log(`GameControls: Showing only RestartButton because ${gameOver ? 'game over' : 'all points cleared'}`);
     return (
       <div className="flex gap-4 items-center">
         <RestartButton onClick={resetGame} />
