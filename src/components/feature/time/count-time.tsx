@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { GAME_CONSTANTS } from "@/constants";
+import { GAME_CONSTANTS, GAME_MESSAGES } from "@/constants";
 import { useGameContext } from "@/contexts/use-game-context";
 
 export function CountTime() {
@@ -7,28 +7,24 @@ export function CountTime() {
   const [intervalId, setIntervalId] = useState<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    try {
-      if (isPlaying) {
-        const id = setInterval(() => {
-          setTime((prev: number) => prev + GAME_CONSTANTS.TIMER_INCREMENT);
-        }, GAME_CONSTANTS.TIMER_INTERVAL);
-        setIntervalId(id);
-      } else {
-        if (intervalId) {
-          clearInterval(intervalId);
-          setIntervalId(null);
-        }
-      }
-    } catch (error) {
-      console.error("Timer error:", error);
+    if (isPlaying) {
+      const id = setInterval(() => {
+        setTime((prev: number) => prev + GAME_CONSTANTS.TIMER_INCREMENT);
+      }, GAME_CONSTANTS.TIMER_INTERVAL);
+      setIntervalId(id);
+      
+      return () => {
+        clearInterval(id);
+      };
     }
-
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId);
-      }
-    };
   }, [isPlaying, setTime]);
+
+  useEffect(() => {
+    if (!isPlaying && intervalId) {
+      clearInterval(intervalId);
+      setIntervalId(null);
+    }
+  }, [isPlaying, intervalId]);
 
   const formatTime = (seconds: number) => {
     return `${seconds.toFixed(1)}s`;
@@ -41,8 +37,8 @@ export function CountTime() {
   };
 
   return (
-    <div className="flex gap-4 items-center w-[300px]">
-      <span className="text-lg font-bold w-[100px]">Time:</span>
+    <div className="flex gap-4 items-center w-[350px]">
+      <span className="text-lg font-bold w-[100px]">{GAME_MESSAGES.TIME}</span>
       <time className="text-lg font-bold" dateTime={formatDateTime(time)}>
         {formatTime(time)}
       </time>

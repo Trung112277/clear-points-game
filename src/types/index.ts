@@ -1,1 +1,1 @@
-export type { GamePoint, GameState } from './game';
+export type { GamePoint, GameState, PointState } from './game';

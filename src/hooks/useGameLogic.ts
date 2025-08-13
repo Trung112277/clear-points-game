@@ -1,15 +1,6 @@
 import { useEffect } from "react";
 import { GAME_CONSTANTS } from "@/constants";
-import type { GamePoint } from "@/types";
-
-interface PointState {
-  number: number;
-  top: number;
-  left: number;
-  isClicked: boolean;
-  countdown: number;
-  isVisible: boolean;
-}
+import type { GamePoint, PointState } from "@/types";
 
 interface UseGameLogicProps {
   isPlaying: boolean;
@@ -37,10 +28,6 @@ export function useGameLogic({
   updateCountdown
 }: UseGameLogicProps) {
   useEffect(() => {
-    setIsAllCleared(isAllCleared);
-  }, [isAllCleared, setIsAllCleared]);
-
-  useEffect(() => {
     if ((isAllCleared || gameOver) && isPlaying) {
       stopTimer();
     }
@@ -56,8 +43,31 @@ export function useGameLogic({
 
   useEffect(() => {
     if (isPlaying && pointStates.length > 0 && !gameOver) {
-      const interval = setInterval(updateCountdown, GAME_CONSTANTS.COUNTDOWN_INTERVAL);
-      return () => clearInterval(interval);
+      let lastTime = Date.now();
+      let accumulatedTime = 0;
+      
+      const interval = setInterval(() => {
+        const currentTime = Date.now();
+        const deltaTime = currentTime - lastTime;
+        accumulatedTime += deltaTime;
+        
+        while (accumulatedTime >= GAME_CONSTANTS.COUNTDOWN_INTERVAL) {
+          updateCountdown();
+          accumulatedTime -= GAME_CONSTANTS.COUNTDOWN_INTERVAL;
+        }
+        
+        lastTime = currentTime;
+      }, 16);
+      
+      return () => {
+        clearInterval(interval);
+      };
     }
   }, [isPlaying, pointStates.length, gameOver, updateCountdown]);
+
+  useEffect(() => {
+    if (isAllCleared && !gameOver) {
+      setIsAllCleared(true);
+    }
+  }, [isAllCleared, gameOver, setIsAllCleared]);
 }

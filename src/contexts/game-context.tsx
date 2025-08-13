@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { useGame } from "@/hooks/useGame";
 import { GameContext } from "./use-game-context";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useMemo } from "react";
 
 export function GameProvider({ children }: { children: ReactNode }) {
   const game = useGame();
@@ -10,32 +10,21 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [isAutoPlaying, setIsAutoPlaying] = useState(false);
 
   const setAllClearedWithLog = useCallback((value: boolean) => {
-    console.log('Context: setIsAllCleared called with:', value);
     setIsAllCleared(value);
   }, []);
 
   const setGameOverWithLog = useCallback((value: boolean) => {
-    console.log('Context: setGameOver called with:', value);
     setGameOver(value);
   }, []);
 
   const resetGameWithAllCleared = useCallback(() => {
-    console.log('Context: Resetting game, isAllCleared, gameOver and autoPlay');
     game.resetGame();
     setIsAllCleared(false);
     setGameOver(false);
     setIsAutoPlaying(false);
   }, [game]);
 
-  useEffect(() => {
-    console.log('GameProvider State Changed:', {
-      isPlaying: game.isPlaying,
-      isAllCleared,
-      gamePointsLength: game.gamePoints.length
-    });
-  }, [game.isPlaying, isAllCleared, game.gamePoints.length]);
-
-  const contextValue = {
+  const contextValue = useMemo(() => ({
     isPlaying: game.isPlaying,
     time: game.time,
     points: game.points,
@@ -51,7 +40,23 @@ export function GameProvider({ children }: { children: ReactNode }) {
     setIsAllCleared: setAllClearedWithLog,
     setGameOver: setGameOverWithLog,
     setIsAutoPlaying: setIsAutoPlaying
-  };
+  }), [
+    game.isPlaying,
+    game.time,
+    game.points,
+    game.gamePoints,
+    isAllCleared,
+    gameOver,
+    isAutoPlaying,
+    game.setTime,
+    game.setPoints,
+    game.startGame,
+    game.stopTimer,
+    resetGameWithAllCleared,
+    setAllClearedWithLog,
+    setGameOverWithLog,
+    setIsAutoPlaying
+  ]);
 
   return (
     <GameContext.Provider value={contextValue}>

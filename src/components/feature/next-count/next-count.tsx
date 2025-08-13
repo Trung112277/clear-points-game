@@ -1,3 +1,5 @@
+import { GAME_MESSAGES } from "@/constants";
+
 interface NextCountProps {
   pointStates: Array<{
     number: number;
@@ -16,7 +18,7 @@ export function NextCount({ pointStates, gameOver }: NextCountProps) {
     return (
       <div className="text-center">
         <span className="text-lg font-bold text-red-600">
-          Wrong click!
+          {GAME_MESSAGES.WRONG_CLICK}
         </span>
       </div>
     );
@@ -28,7 +30,7 @@ export function NextCount({ pointStates, gameOver }: NextCountProps) {
         <span className={`text-lg font-bold ${
           pointStates.length > 0 ? "text-green-600" : "text-black"
         }`}>
-          {pointStates.length > 0 ? "All Done!" : "Ready to start"}
+          {pointStates.length > 0 ? GAME_MESSAGES.ALL_DONE : GAME_MESSAGES.READY_TO_START}
         </span>
       </div>
     );
@@ -36,7 +38,7 @@ export function NextCount({ pointStates, gameOver }: NextCountProps) {
 
   return (
     <div className="text-center">
-      <span className="text-lg font-bold">Next: {nextNumber}</span>
+      <span className="text-lg font-bold">{GAME_MESSAGES.NEXT} {nextNumber}</span>
     </div>
   );
 }

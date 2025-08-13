@@ -1,6 +1,7 @@
 import { createContext, useContext } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import type { GamePoint } from "@/types";
+import { ERROR_MESSAGES } from "@/constants";
 
 interface GameContextType {
   // Game state
@@ -28,7 +29,7 @@ const GameContext = createContext<GameContextType | undefined>(undefined);
 export function useGameContext() {
   const context = useContext(GameContext);
   if (context === undefined) {
-    throw new Error("useGameContext must be used within a GameProvider");
+    throw new Error(ERROR_MESSAGES.CONTEXT_MUST_BE_USED_WITHIN_PROVIDER);
   }
   return context;
 }

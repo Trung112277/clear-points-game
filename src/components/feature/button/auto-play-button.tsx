@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useGameContext } from "@/contexts/use-game-context";
+import { GAME_MESSAGES } from "@/constants";
 
 export function AutoPlayButton() {
   const { isAutoPlaying, setIsAutoPlaying, isPlaying, gameOver, isAllCleared } = useGameContext();
@@ -11,7 +12,7 @@ export function AutoPlayButton() {
   };
 
   const canAutoPlay = isPlaying && !gameOver && !isAllCleared;
-  const buttonText = isAutoPlaying ? "Auto Play OFF" : "Auto Play ON";
+  const buttonText = isAutoPlaying ? GAME_MESSAGES.AUTO_PLAY_OFF : GAME_MESSAGES.AUTO_PLAY_ON;
   const buttonVariant = isAutoPlaying ? "destructive" : "default";
 
   return (
