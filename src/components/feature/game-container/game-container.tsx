@@ -4,6 +4,7 @@ import { GAME_CONSTANTS } from "@/constants";
 import { useGameContext } from "@/contexts/use-game-context";
 import { useEffect } from "react";
 import { usePointStates } from "@/hooks/usePointStates";
+import { useGameLogic } from "@/hooks/useGameLogic";
 import { getZIndex } from "@/utils";
 
 export function GameContainer() {
@@ -17,6 +18,18 @@ export function GameContainer() {
     isAllCleared
   } = usePointStates(gamePoints);
 
+  useGameLogic({
+    isPlaying,
+    gamePoints,
+    pointStates,
+    isAllCleared,
+    setIsAllCleared,
+    stopTimer,
+    resetPoints,
+    initializePoints,
+    updateCountdown
+  });
+
   useEffect(() => {
     console.log('GameContainer State Changed:', {
       isPlaying,
@@ -25,38 +38,6 @@ export function GameContainer() {
       visiblePoints: pointStates.filter(p => p.isVisible).length
     });
   }, [isPlaying, isAllCleared, pointStates.length]);
-
-  useEffect(() => {
-    console.log('GameContainer: Updating context isAllCleared:', isAllCleared);
-    setIsAllCleared(isAllCleared);
-  }, [isAllCleared, setIsAllCleared]);
-
-  useEffect(() => {
-    if (isAllCleared && isPlaying) {
-      console.log('GameContainer: Stopping timer because all points cleared');
-      stopTimer();
-    }
-  }, [isAllCleared, isPlaying, stopTimer]);
-
-  useEffect(() => {
-    if (!isPlaying && gamePoints.length === 0) {
-      console.log('GameContainer: Game reset, clearing points');
-      resetPoints();
-    }
-  }, [isPlaying, gamePoints.length, resetPoints]);
-
-  useEffect(() => {
-    if (gamePoints.length > 0 && isPlaying) {
-      initializePoints();
-    }
-  }, [gamePoints, isPlaying, initializePoints]);
-
-  useEffect(() => {
-    if (isPlaying && pointStates.length > 0) {
-      const interval = setInterval(updateCountdown, GAME_CONSTANTS.COUNTDOWN_INTERVAL);
-      return () => clearInterval(interval);
-    }
-  }, [isPlaying, pointStates.length, updateCountdown]);
 
   return (
     <div className="flex flex-col gap-4">

@@ -7,7 +7,6 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const game = useGame();
   const [isAllCleared, setIsAllCleared] = useState(false);
 
-  // Wrapper function để log khi setIsAllCleared được gọi
   const setAllClearedWithLog = useCallback((value: boolean) => {
     console.log('Context: setIsAllCleared called with:', value);
     setIsAllCleared(value);
@@ -19,7 +18,6 @@ export function GameProvider({ children }: { children: ReactNode }) {
     setIsAllCleared(false);
   }, [game]);
 
-  // Chỉ log khi có thay đổi thực sự
   useEffect(() => {
     console.log('GameProvider State Changed:', {
       isPlaying: game.isPlaying,
