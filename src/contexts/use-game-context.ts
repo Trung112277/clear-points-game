@@ -10,6 +10,7 @@ interface GameContextType {
   gamePoints: GamePoint[];
   isAllCleared: boolean;
   gameOver: boolean;
+  isAutoPlaying: boolean;
   
   // Game actions
   setTime: Dispatch<SetStateAction<number>>;
@@ -19,6 +20,7 @@ interface GameContextType {
   stopTimer: () => void;
   setIsAllCleared: (cleared: boolean) => void;
   setGameOver: (gameOver: boolean) => void;
+  setIsAutoPlaying: (autoPlaying: boolean) => void;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);

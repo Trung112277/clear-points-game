@@ -7,6 +7,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const game = useGame();
   const [isAllCleared, setIsAllCleared] = useState(false);
   const [gameOver, setGameOver] = useState(false);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(false);
 
   const setAllClearedWithLog = useCallback((value: boolean) => {
     console.log('Context: setIsAllCleared called with:', value);
@@ -19,10 +20,11 @@ export function GameProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const resetGameWithAllCleared = useCallback(() => {
-    console.log('Context: Resetting game, isAllCleared and gameOver');
+    console.log('Context: Resetting game, isAllCleared, gameOver and autoPlay');
     game.resetGame();
     setIsAllCleared(false);
     setGameOver(false);
+    setIsAutoPlaying(false);
   }, [game]);
 
   useEffect(() => {
@@ -40,13 +42,15 @@ export function GameProvider({ children }: { children: ReactNode }) {
     gamePoints: game.gamePoints,
     isAllCleared,
     gameOver,
+    isAutoPlaying,
     setTime: game.setTime,
     setPoints: game.setPoints,
     startGame: game.startGame,
     resetGame: resetGameWithAllCleared,
     stopTimer: game.stopTimer,
     setIsAllCleared: setAllClearedWithLog,
-    setGameOver: setGameOverWithLog
+    setGameOver: setGameOverWithLog,
+    setIsAutoPlaying: setIsAutoPlaying
   };
 
   return (

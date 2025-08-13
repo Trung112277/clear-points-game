@@ -5,6 +5,7 @@ import { useGameContext } from "@/contexts/use-game-context";
 import { useEffect } from "react";
 import { usePointStates } from "@/hooks/usePointStates";
 import { useGameLogic } from "@/hooks/useGameLogic";
+import { useAutoPlay } from "@/hooks/useAutoPlay";
 import { getZIndex } from "@/utils";
 
 export function GameContainer() {
@@ -17,6 +18,16 @@ export function GameContainer() {
     resetPoints,
     isAllCleared
   } = usePointStates(gamePoints, setGameOver);
+
+  useAutoPlay({ pointStates, handlePointClick });
+  
+  console.log('GameContainer render:', {
+    pointStatesLength: pointStates.length,
+    isPlaying,
+    gameOver,
+    isAllCleared,
+    handlePointClickType: typeof handlePointClick
+  });
 
   useGameLogic({
     isPlaying,
