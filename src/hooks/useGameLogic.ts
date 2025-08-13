@@ -43,11 +43,11 @@ export function useGameLogic({
       stopTimer();
     }
 
-    if (!isPlaying && gamePoints.length === 0) {
+    if (!isPlaying && gamePoints.length === 0 && !isAllCleared) {
       resetPoints();
     }
 
-    if (gamePoints.length > 0 && isPlaying) {
+    if (gamePoints.length > 0 && isPlaying && !isAllCleared) {
       initializePoints();
     }
   }, [isAllCleared, isPlaying, gamePoints.length, stopTimer, resetPoints, initializePoints]);

@@ -15,7 +15,9 @@ export function PointsGame({ number, isClicked, countdown, onClick }: PointsGame
 
   return (
     <div 
-      className={`border border-red-500 ${backgroundColor} rounded-full w-[50px] h-[50px] flex flex-col items-center justify-center cursor-pointer hover:bg-gray-400 transition-all duration-300`}
+      className={`border border-red-500 ${backgroundColor} rounded-full w-[50px] h-[50px] flex flex-col items-center justify-center cursor-pointer transition-all duration-300 ${
+        isClicked ? '' : 'hover:bg-gray-400'
+      }`}
       style={{ opacity, transform: scale }}
       onClick={onClick}
     >

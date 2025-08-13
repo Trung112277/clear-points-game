@@ -31,13 +31,13 @@ export function GameControls() {
         <PlayButton onClick={startGame} />
       </div>
     );
-  } else {
-    console.log('GameControls: Showing AutoPlay + Restart buttons');
-    return (
-      <div className="flex gap-4 items-center">
-        <AutoPlayButton />
-        <RestartButton onClick={resetGame} />
-      </div>
-    );
   }
+
+  console.log('GameControls: Showing AutoPlay + Restart buttons');
+  return (
+    <div className="flex gap-4 items-center">
+      <AutoPlayButton />
+      <RestartButton onClick={resetGame} />
+    </div>
+  );
 }
