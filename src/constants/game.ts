@@ -2,6 +2,7 @@ export const GAME_CONSTANTS = {
   CONTAINER_SIZE: 500,
   POINT_SIZE: 50,
   MIN_POINTS: 5,
+  MAX_POINTS: 1000,
   TIMER_INTERVAL: 100,
   TIMER_INCREMENT: 0.1,
   // Animation constants
