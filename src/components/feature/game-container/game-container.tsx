@@ -69,7 +69,7 @@ export function GameContainer() {
             </div>
           ))}
       </div>
-      <NextCount />
+      <NextCount pointStates={pointStates} />
     </div>
   );
 }
